@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class CustomGravity : MonoBehaviour
 {
@@ -11,39 +12,26 @@ public class CustomGravity : MonoBehaviour
     public TMP_InputField dragInputField;
     public TMP_InputField angularDragInputField;
 
-
     void Start()
     {
-        // Find all objects with the tag physics
-        GameObject[] physicsObjects = GameObject.FindGameObjectsWithTag("Physics");
+        StartCoroutine(InitializeValues());
+    }
 
-        foreach (GameObject obj in physicsObjects)
-        {
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.useGravity = false;  /// Disable Unit gravity
-                PhysicsObjectManager.Instance.RegisterRigidbody(rb);
-            }
-        }
-
-        // Sets default values for inputs
-        gravityInputField.text = "-9.81";
-        dragInputField.text = "0.5";
-        angularDragInputField.text = "0.05";
+    IEnumerator InitializeValues()
+    {
+        yield return new WaitForSeconds(1f);
+        
+        float.TryParse(gravityInputField.text, out _gravity);
+        float.TryParse(dragInputField.text, out _drag);
+        float.TryParse(angularDragInputField.text, out _angularDrag);
     }
 
     void FixedUpdate()
     {
-        /// Gets Gravity, drag and angular drag float from menu
-        float.TryParse(gravityInputField.text, out _gravity);
-        float.TryParse(dragInputField.text, out _drag);
-        float.TryParse(angularDragInputField.text, out _angularDrag);
-
-        /// Apply custom gravity
-        PhysicsObjectManager.Instance.ApplyCustomGravity(_gravity, _drag, _angularDrag);
+        if (PhysicsObjectManager.Instance != null)
+        {
+            PhysicsObjectManager.Instance.ApplyCustomGravity(_gravity, _drag, _angularDrag);
+        }
     }
-
-
 }
 

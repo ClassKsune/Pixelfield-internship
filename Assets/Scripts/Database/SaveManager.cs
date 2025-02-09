@@ -43,18 +43,31 @@ public class LoadData : MonoBehaviour
     });
   }
 
+public void SaveLocalData() 
+{
+    float parsedGravity, parsedDrag, parsedAngularDrag;
 
-  public void SaveLocalData() 
-  {
-    GameData data = new GameData(float.Parse(gravity.text), float.Parse(drag.text), float.Parse(angularDrag.text));
+    if (!float.TryParse(gravity.text, out parsedGravity))
+        parsedGravity = -9.81f;
+
+    if (!float.TryParse(drag.text, out parsedDrag))
+        parsedDrag = 0.5f;
+
+    if (!float.TryParse(angularDrag.text, out parsedAngularDrag))
+        parsedAngularDrag = 0.05f;
+
+    GameData data = new GameData(parsedGravity, parsedDrag, parsedAngularDrag);
     string json = JsonUtility.ToJson(data, true);
     File.WriteAllText(filePath, json);
-    PlayerPrefs.SetFloat("gravity", float.Parse(gravity.text));
-    PlayerPrefs.SetFloat("drag", float.Parse(drag.text));
-    PlayerPrefs.SetFloat("angular Drag", float.Parse(angularDrag.text));
+
+    PlayerPrefs.SetFloat("gravity", parsedGravity);
+    PlayerPrefs.SetFloat("drag", parsedDrag);
+    PlayerPrefs.SetFloat("angularDrag", parsedAngularDrag);
     PlayerPrefs.Save();
-    Debug.Log("Saved Localy");
-  }
+
+    Debug.Log("Saved Locally");
+}
+
 
   public void LoadUserData()
   {

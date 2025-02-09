@@ -5,20 +5,6 @@ public class SceneSwitcher : MonoBehaviour
 {
     private static SceneSwitcher instance;
 
-    private void Awake()
-    {
-        // Ensure only one instance exists
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     /// Loads a scene by its name.
     /// Usable for loading scene in non-index order
     public void LoadScene(string sceneName)
